@@ -1,7 +1,6 @@
 package com.dervidex.nweather.logic.network
 
 import com.dervidex.nweather.logic.network.service.PlaceService
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.await
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,7 +13,6 @@ object AppNetwork {
     private val placeService by lazy { ServiceCreator.create<PlaceService>() }
 
     suspend fun queryPlaces(place: String) = placeService.queryPlaces(place).await()
-
 
 
 
