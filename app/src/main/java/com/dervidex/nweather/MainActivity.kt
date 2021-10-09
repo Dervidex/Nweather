@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
 import com.dervidex.nweather.databinding.ActivityMainBinding
+import com.dervidex.nweather.logic.model.Sky
 import com.dervidex.nweather.logic.network.AppNetwork
 import com.dervidex.nweather.ui.place.PlaceViewModel
 import kotlinx.coroutines.*
@@ -19,5 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
     }
 }

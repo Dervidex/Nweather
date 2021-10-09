@@ -31,7 +31,7 @@ class PlaceFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.rvPlaces.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        adapter= PlaceAdapter(viewModel.placeList)
+        adapter= PlaceAdapter(this, viewModel.placeList)
         binding.rvPlaces.adapter = adapter
 
 

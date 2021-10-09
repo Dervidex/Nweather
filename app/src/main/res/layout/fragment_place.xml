@@ -23,6 +23,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="10dp"
             android:paddingHorizontal="10dp"
+            android:maxLines="1"
+            android:inputType="text"
             android:hint="@string/inputPlace"
             android:textSize="14sp"
             android:textColor="?android:attr/textColorPrimary"
