@@ -11,12 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dervidex.nweather.AppApplication
 import com.dervidex.nweather.databinding.FragmentPlaceBinding
+import com.dervidex.nweather.ui.weather.WeatherActivity
 import org.neko.util.showToast
 
 class PlaceFragment : Fragment() {
     private var _binding: FragmentPlaceBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by lazy { ViewModelProvider(this).get(PlaceViewModel::class.java) }
+    val viewModel by lazy { ViewModelProvider(this).get(PlaceViewModel::class.java) }
     private lateinit var adapter: PlaceAdapter
 
     override fun onCreateView(
@@ -30,10 +31,13 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.rvPlaces.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        adapter= PlaceAdapter(this, viewModel.placeList)
-        binding.rvPlaces.adapter = adapter
 
+        checkDefaultPlace()
+
+        binding.rvPlaces.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        adapter = PlaceAdapter(this, viewModel.placeList)
+        binding.rvPlaces.adapter = adapter
 
         searchViewLiveUpdate()
 
@@ -43,6 +47,19 @@ class PlaceFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    /**
+     * 检查本地存储是否有默认Place，
+     * 如果有，直接跳转到WeatherActivity
+     */
+    private fun checkDefaultPlace() {
+        if (viewModel.isPlaceSaved()) {
+            viewModel.getPlace().apply {
+                WeatherActivity.startAction(this@PlaceFragment, name, location.lng, location.lat)
+            }
+            this.activity?.finish()
+        }
     }
 
     /**

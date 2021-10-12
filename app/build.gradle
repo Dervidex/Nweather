@@ -47,6 +47,8 @@ dependencies {
 
     implementation fileTree(dir: 'libs', includes: ['*.jar'])
 
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
     implementation 'com.squareup.retrofit2:retrofit:2.6.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
 

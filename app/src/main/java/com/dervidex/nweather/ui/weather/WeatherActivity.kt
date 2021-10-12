@@ -1,11 +1,9 @@
 package com.dervidex.nweather.ui.weather
 
-import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dervidex.nweather.R
@@ -15,8 +13,9 @@ import com.dervidex.nweather.logic.model.DailyResponse
 import com.dervidex.nweather.logic.model.RealtimeResponse
 import com.dervidex.nweather.logic.model.Sky
 import com.dervidex.nweather.logic.model.Weather
-import org.neko.util.log2D
+import org.neko.util.Log2
 import org.neko.util.showToast
+import org.neko.util.startActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,11 +23,10 @@ class WeatherActivity : AppCompatActivity() {
 
     companion object {
         fun startAction(fragment: Fragment, placeName: String, locationLng: String, locationLat: String) {
-            Intent(fragment.context, WeatherActivity::class.java).apply {
+            startActivity<WeatherActivity>(fragment) {
                 putExtra("placeName", placeName)
                 putExtra("locationLng", locationLng)
                 putExtra("locationLat", locationLat)
-                fragment.startActivity(this)
             }
         }
     }
@@ -50,10 +48,16 @@ class WeatherActivity : AppCompatActivity() {
 
         viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
 
+        binding.root.setOnRefreshListener {
+            viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        }
+
         viewModel.weatherLiveData.observe(this) {
             val weather = it.getOrNull()
             if (weather != null) {
                 showWeatherInfo(weather)
+                binding.root.isRefreshing = false
+                Log2.d("weather", "get newest weather info")
             } else {
                 it.exceptionOrNull()?.printStackTrace()
                 "无法获取天气信息".showToast(this)
@@ -72,7 +76,7 @@ class WeatherActivity : AppCompatActivity() {
         initForecast(daily)
         initLifeIndex(daily)
 
-        binding.root.visibility = View.VISIBLE
+        binding.weatherLayout.visibility = View.VISIBLE
     }
 
     /**
@@ -135,6 +139,7 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     private fun hideStatusBar() {
+        // WindowInsetsController在api30(android 11)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 

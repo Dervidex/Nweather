@@ -1,15 +1,14 @@
 package com.dervidex.nweather.ui.place
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.dervidex.nweather.databinding.ItemPlaceBinding
+import com.dervidex.nweather.logic.Repository
 import com.dervidex.nweather.logic.model.Place
 import com.dervidex.nweather.ui.weather.WeatherActivity
 
-class PlaceAdapter(private val fragment: Fragment, private val placeList: List<Place>) : RecyclerView.Adapter<PlaceAdapter.ViewHolder>(){
+class PlaceAdapter(private val fragment: PlaceFragment, private val placeList: List<Place>) : RecyclerView.Adapter<PlaceAdapter.ViewHolder>(){
     inner class ViewHolder(binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root) {
         val tvPlaceName = binding.tvPlaceName
         val tvPlaceAddress = binding.tvPlaceAddress
@@ -20,8 +19,13 @@ class PlaceAdapter(private val fragment: Fragment, private val placeList: List<P
         val holder = ViewHolder(binding)
         holder.itemView.setOnClickListener {
             placeList[holder.adapterPosition].apply {
+                // 保存place信息到本地
+                // mvvm框架结构上ui控制层只能对viewModel操作，不能直接对Repository操作
+                fragment.viewModel.savedPlace(this)
+
                 WeatherActivity.startAction(fragment, name, location.lng, location.lat)
             }
+
         }
         return holder
     }

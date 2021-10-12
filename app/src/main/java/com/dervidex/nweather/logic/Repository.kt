@@ -1,16 +1,15 @@
 package com.dervidex.nweather.logic
 
 import androidx.lifecycle.liveData
+import com.dervidex.nweather.logic.dao.PlaceDao
+import com.dervidex.nweather.logic.model.Place
 import com.dervidex.nweather.logic.model.Weather
 import com.dervidex.nweather.logic.network.AppNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import org.neko.util.Log2
 import java.lang.Exception
 import java.lang.RuntimeException
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 
 object Repository {
 
@@ -49,6 +48,11 @@ object Repository {
         }
     }
 
+    fun savePlace(place: Place) = PlaceDao.savePlace(place)
+
+    fun getPlace(): Place = PlaceDao.getPlace()
+
+    fun isPlaceSave() = PlaceDao.isPlaceSaved()
 
     private fun <T> tryCatch(block: suspend () -> Result<T>) = liveData(Dispatchers.IO) {
         val result = try {
