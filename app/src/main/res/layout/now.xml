@@ -7,15 +7,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:fitsSystemWindows="true" >
+        android:fitsSystemWindows="true">
 
-        <Button
+        <android.widget.Button
             android:id="@+id/btNav"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="15dp"
-            android:background="@drawable/ic_home" />
+            android:background="@drawable/ic_home"/>
 
         <TextView
             android:id="@+id/tvPlaceName"
