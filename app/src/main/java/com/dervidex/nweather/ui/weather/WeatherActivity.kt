@@ -1,9 +1,13 @@
 package com.dervidex.nweather.ui.weather
 
+import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dervidex.nweather.R
@@ -45,10 +49,11 @@ class WeatherActivity : AppCompatActivity() {
         viewModel.locationLng = intent.getStringExtra("locationLng") ?: ""
         viewModel.locationLat = intent.getStringExtra("locationLat") ?: ""
 
+        refreshWeather()
 
-        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        initDrawerLayout()
 
-        binding.root.setOnRefreshListener {
+        binding.refreshLayout.setOnRefreshListener {
             viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
         }
 
@@ -56,7 +61,7 @@ class WeatherActivity : AppCompatActivity() {
             val weather = it.getOrNull()
             if (weather != null) {
                 showWeatherInfo(weather)
-                binding.root.isRefreshing = false
+                binding.refreshLayout.isRefreshing = false
                 Log2.d("weather", "get newest weather info")
             } else {
                 it.exceptionOrNull()?.printStackTrace()
@@ -136,6 +141,38 @@ class WeatherActivity : AppCompatActivity() {
         binding.lifeIndexLayout.tvDressing.text = lifeIndex.dressing[0].desc
         binding.lifeIndexLayout.tvUltraviolet.text = lifeIndex.ultraviolet[0].desc
         binding.lifeIndexLayout.tvCarWashing.text = lifeIndex.carWashing[0].desc
+    }
+
+    private fun initDrawerLayout() {
+        binding.nowLayout.btNav.setOnClickListener {
+            binding.root.openDrawer(GravityCompat.START)
+        }
+
+        binding.root.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerOpened(drawerView: View) {}
+
+            override fun onDrawerClosed(drawerView: View) {
+                val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(drawerView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
+    }
+
+    private fun refreshWeather() {
+        binding.refreshLayout.isRefreshing = true
+        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+    }
+
+    fun refreshWeather(placeName: String, locationLng: String, locationLat: String) {
+        binding.root.closeDrawers()
+        viewModel.placeName = placeName
+        viewModel.locationLng = locationLng
+        viewModel.locationLat = locationLat
+        refreshWeather()
     }
 
     private fun hideStatusBar() {

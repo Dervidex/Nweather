@@ -50,11 +50,11 @@ class PlaceFragment : Fragment() {
     }
 
     /**
-     * 检查本地存储是否有默认Place，
-     * 如果有，直接跳转到WeatherActivity
+     * 检查本地存储是否有默认Place，同时检查fragment的activity是否不是WeatherActivity
+     * 如果都满足，直接跳转到WeatherActivity
      */
     private fun checkDefaultPlace() {
-        if (viewModel.isPlaceSaved()) {
+        if (activity !is WeatherActivity && viewModel.isPlaceSaved()) {
             viewModel.getPlace().apply {
                 WeatherActivity.startAction(this@PlaceFragment, name, location.lng, location.lat)
             }
