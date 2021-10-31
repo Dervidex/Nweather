@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dervidex.nweather.databinding.ItemPlaceBinding
-import com.dervidex.nweather.logic.Repository
 import com.dervidex.nweather.logic.model.Place
 import com.dervidex.nweather.ui.weather.WeatherActivity
 
